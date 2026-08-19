@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "ragnacron.workspaces-per-monitor",
+  "name": "Workspaces (per monitor)",
+  "version": "1.0.0",
+  "author": "Manuel Werder",
+  "description": "Show only the workspaces that belong to the monitor each bar is on",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Workspaces.qml"
+  },
+  "barWidget": {
+    "displayName": "Workspaces (per monitor)",
+    "description": "Show only the workspaces that belong to the monitor each bar is on",
+    "category": "Compositor",
+    "allowMultiple": false,
+    "defaultSection": "left"
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.workspaces"
+  }
+}

@@ -52,6 +52,15 @@ omarchy plugin add https://github.com/ragnacron/omarchy-workspaces-per-monitor.g
 The widget declares `clonedFrom: omarchy.workspaces`, so it takes over the built-in
 widget's existing slot in your bar — same position, same inline settings. Nothing to move.
 
+If you have already replaced the built-in with your own clone (via
+`omarchy plugin clone omarchy.workspaces`), remove that first. The slot takeover looks for
+`omarchy.workspaces` in your layout, and if it is not there this lands *beside* your clone
+in the left section instead of replacing it, leaving two workspace widgets in the bar:
+
+```bash
+omarchy plugin remove <username>.workspaces --yes   # restores the built-in to its slot
+```
+
 ## Configuration
 
 None. The monitor-to-workspace mapping is read live from Hyprland, so `monitors.lua`
@@ -97,9 +106,23 @@ omarchy plugin remove ragnacron.workspaces-per-monitor
 ## Development
 
 The plugin folder is the repo root, which is exactly the layout `omarchy plugin add`
-installs, so a checkout can be dropped straight into
-`~/.config/omarchy/plugins/<manifest id>/`. Symlinking it will not work —
-`omarchy plugin validate` rejects any symlink inside a plugin folder. Sync a copy instead:
+expects. That command installs the plugin as a **git checkout** of this repo with `origin`
+set, so after installing you have two working copies of the same thing: the clone you
+develop in, and `~/.config/omarchy/plugins/ragnacron.workspaces-per-monitor/`. Pick one as
+your editing copy and pull into the other:
+
+```bash
+# editing in your own clone
+git push
+omarchy plugin update ragnacron.workspaces-per-monitor
+
+# or editing the installed checkout directly, then syncing your clone
+git -C /path/to/your/clone pull
+```
+
+Symlinking one to the other will not work — `omarchy plugin validate` rejects any symlink
+inside a plugin folder. If you installed by copying the folder rather than through
+`omarchy plugin add`, the installed directory is a plain copy and you sync it with:
 
 ```bash
 rsync -a --delete --exclude .git \

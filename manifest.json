@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "ragnacron.workspaces-per-monitor",
   "name": "Workspaces (per monitor)",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": "Manuel Werder",
   "description": "Show only the workspaces that belong to the monitor each bar is on",
   "kinds": [

@@ -8,7 +8,7 @@ import qs.Ui
 BarWidget {
   id: root
   moduleName: "omarchy.workspaces"
-  
+
   // The bar builds one surface per screen, so each live copy has to work out
   // which screen it landed on. QsWindow.window and window.screen both notify,
   // so the chain re-resolves if the panel is built before its window exists.
@@ -28,7 +28,10 @@ BarWidget {
     for (var i = 0; i < values.length; i++) {
       var workspace = values[i]
       var id = workspace.id
-      if (id <= 0 || id > 10 || ids.indexOf(id) !== -1) continue
+      // Special and named workspaces have negative ids. Anything above 10 is
+      // kept: Super + N only reaches 1-10, but a workspace a window rule or an
+      // old session left at 14 still holds windows, and hiding it hides them.
+      if (id <= 0 || ids.indexOf(id) !== -1) continue
 
       // Until the screen is known there is nothing to filter by, so everything
       // shows: stock behaviour, which is also what a single-monitor session
@@ -59,6 +62,26 @@ BarWidget {
   function focusWorkspace(id) {
     if (!root.bar) return
     root.bar.run("hyprctl dispatch " + Util.shellQuote("hl.dsp.focus({ workspace = \"" + id + "\" })"))
+  }
+
+  // Quickshell credits every workspace switch to the focused monitor, since the
+  // event doesn't say which monitor switched, and misses the workspace a monitor
+  // falls back to when its own is moved away. Either leaves `active` and
+  // `monitor` stale, so ask Hyprland for the truth, as the built-in widget does.
+  // Every bar shares the answer, so only the focused monitor's bar asks after a
+  // plain switch.
+  Connections {
+    target: Hyprland
+
+    function onRawEvent(event) {
+      var name = event ? String(event.name) : ""
+      var focused = Hyprland.focusedMonitor
+      var mine = root.screenName !== "" && focused !== null && String(focused.name || "") === root.screenName
+      if ((name === "workspacev2" && mine) || name === "moveworkspacev2" || name === "changeworkspaceid") {
+        Hyprland.refreshMonitors()
+        Hyprland.refreshWorkspaces()
+      }
+    }
   }
 
   readonly property real trailingGap: root.vertical ? 0 : Style.spaceReal(1.5)

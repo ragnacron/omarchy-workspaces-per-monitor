@@ -30,7 +30,9 @@ once. The right-hand one stays visible even while the left monitor has focus.
 
 ## Requirements
 
-- Omarchy 4.5 or later. For 4.0, use [v1.0.0](https://github.com/ragnacron/omarchy-workspaces-per-monitor/tree/b0de0f7), which needs no Hyprland setup.
+- Omarchy 4.5 or later. On 4.0, stay on
+  [v1.0.0](https://github.com/ragnacron/omarchy-workspaces-per-monitor/releases/tag/v1.0.0),
+  which needs no Hyprland setup. See [Staying on 1.0.0](#staying-on-100-omarchy-40).
 - Workspaces bound to monitors with workspace rules
 - Omarchy's per-monitor numbering switched off, with `hypr/global-workspaces.lua`
   from this plugin. See below.
@@ -127,6 +129,20 @@ in the left section instead of replacing it, leaving two workspace widgets in th
 ```bash
 omarchy plugin remove <username>.workspaces --yes   # restores the built-in to its slot
 ```
+
+### Staying on 1.0.0 (Omarchy 4.0)
+
+`omarchy plugin add` always installs the latest `main`, which needs Omarchy 4.5. On 4.0,
+clone the 1.0.0 tag into the plugin folder yourself and enable it:
+
+```bash
+git clone --branch v1.0.0 https://github.com/ragnacron/omarchy-workspaces-per-monitor.git \
+  ~/.config/omarchy/plugins/ragnacron.workspaces-per-monitor
+omarchy plugin enable ragnacron.workspaces-per-monitor
+```
+
+`omarchy plugin update` also pulls the latest `main`, and offers to move this checkout to
+it. Answer no for this plugin, and don't pass it `--yes`.
 
 ## Configuration
 
